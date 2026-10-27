@@ -25,7 +25,8 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+let ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const PACK_ROOT = ROOT;
 const args = process.argv.slice(2);
 const flag = (n) => args.includes(n);
 const opt = (n, d) => (args.includes(n) ? args[args.indexOf(n) + 1] : d);
@@ -33,7 +34,7 @@ const opt = (n, d) => (args.includes(n) ? args[args.indexOf(n) + 1] : d);
 const REF = opt('--ref', 'origin/main');
 const AUTOSHORT_REPO = opt('--autoshort-repo', process.env.AUTOSHORT_REPO || '/Users/kienpt/workspace/web3/autoshorts');
 const STORYSHORT_REPO = opt('--storyshort-repo', process.env.STORYSHORT_REPO || '/Users/kienpt/workspace/web3/storyshort');
-const SNAPSHOT = path.join(ROOT, 'registry/tools.json');
+const SNAPSHOT = path.join(PACK_ROOT, 'registry/tools.json');
 
 const ALLOWED_FIELDS = ['name', 'description', 'license', 'compatibility', 'metadata', 'allowed-tools'];
 const EXPECTED_SKILLS = ['make-faceless-video', 'plan-a-video-series', 'research-winning-formats'];
@@ -226,15 +227,17 @@ function toolTokens(text) {
 
 // ── main ─────────────────────────────────────────────────────────────────────
 
-async function main() {
-  const registry = loadRegistry();
-  for (const k of ['autoshort', 'storyshort']) {
-    if (!registry[k]) {
-      console.error(`No registry for ${k}: pass --${k}-repo <checkout> or keep registry/tools.json`);
-      process.exit(2);
-    }
-    notes.push(`registry ${k}: ${registry[k].tools.length} tools from ${registry.source[k]}`);
-  }
+/**
+ * Validates the pack in `root` against `registry` ({ autoshort: { tools, retired }, storyshort: { tools, retired }, source }).
+ * Pure apart from reading files (and, with opts.sync, copying references/ into each skill; with opts.live, two public GETs).
+ * The AutoShort app repository calls this from a vitest with its own tool registry.
+ */
+export async function validatePack(root, registry, opts = {}) {
+  ROOT = root;
+  errors.length = 0;
+  warnings.length = 0;
+  notes.length = 0;
+  for (const k of ['autoshort', 'storyshort']) notes.push(`registry ${k}: ${registry[k].tools.length} tools from ${registry.source?.[k] ?? 'caller'}`);
   const AS = new Set(registry.autoshort.tools);
   const SS = new Set(registry.storyshort.tools);
   const RETIRED = new Set(registry.autoshort.retired);
@@ -250,7 +253,7 @@ async function main() {
     for (const f of Object.values(TABLES)) {
       const copy = path.join(skillsDir, s, f);
       const canon = path.join(ROOT, f);
-      if (flag('--sync') && fs.existsSync(canon)) {
+      if (opts.sync && fs.existsSync(canon)) {
         fs.mkdirSync(path.dirname(copy), { recursive: true });
         fs.copyFileSync(canon, copy);
       }
@@ -295,7 +298,7 @@ async function main() {
   const kindOf = { ...Object.fromEntries(asRows.map((r) => [r.name, r.kind])), ...Object.fromEntries(ssRows.map((r) => [r.name, r.kind])) };
 
   // live comparison
-  if (flag('--live')) {
+  if (opts.live) {
     try {
       const live = await liveLists();
       const liveAS = new Set(live.autoshort);
@@ -434,18 +437,30 @@ async function main() {
   }
   for (const f of ['README.md', 'docs/install.md']) if (!fs.existsSync(path.join(ROOT, f))) error(`${f} is missing`);
 
-  if (flag('--cli')) {
+  if (opts.cli) {
     const r = spawnSync('claude', ['plugin', 'validate', '--strict', ROOT], { encoding: 'utf8' });
     if (r.error) error(`--cli: could not run claude: ${r.error.message}`);
     else if (r.status !== 0) error(`--cli: claude plugin validate failed:\n${r.stdout}${r.stderr}`);
     else notes.push('claude plugin validate --strict: passed');
   }
 
-  for (const n of notes) console.log(`note: ${n}`);
-  for (const w of warnings) console.log(`warning: ${w}`);
-  for (const e of errors) console.log(`error: ${e}`);
-  console.log(`\n${errors.length} error(s), ${warnings.length} warning(s); ${skillDirs.length} skills, ${AS.size} AutoShort tools, ${SS.size} StoryShort tools in the registries`);
-  process.exit(errors.length || (flag('--strict') && warnings.length) ? 1 : 0);
+  return { errors: [...errors], warnings: [...warnings], notes: [...notes], skills: skillDirs, counts: { autoshort: AS.size, storyshort: SS.size } };
+}
+
+async function main() {
+  const registry = loadRegistry();
+  for (const k of ['autoshort', 'storyshort']) {
+    if (!registry[k]) {
+      console.error(`No registry for ${k}: pass --${k}-repo <checkout> or keep registry/tools.json`);
+      process.exit(2);
+    }
+  }
+  const r = await validatePack(PACK_ROOT, registry, { live: flag('--live'), sync: flag('--sync'), cli: flag('--cli') });
+  for (const n of r.notes) console.log(`note: ${n}`);
+  for (const w of r.warnings) console.log(`warning: ${w}`);
+  for (const e of r.errors) console.log(`error: ${e}`);
+  console.log(`\n${r.errors.length} error(s), ${r.warnings.length} warning(s); ${r.skills.length} skills, ${r.counts.autoshort} AutoShort tools, ${r.counts.storyshort} StoryShort tools in the registries`);
+  process.exit(r.errors.length || (flag('--strict') && r.warnings.length) ? 1 : 0);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await main();
