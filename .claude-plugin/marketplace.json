@@ -1,0 +1,26 @@
+{
+  "name": "autoshort-skills",
+  "description": "Agent Skills for making faceless short videos with the AutoShort and StoryShort MCP servers.",
+  "owner": {
+    "name": "AutoShort",
+    "email": "support@autoshort.org",
+    "url": "https://autoshort.org"
+  },
+  "plugins": [
+    {
+      "name": "autoshort-skills",
+      "source": "./",
+      "description": "Three skills for the AutoShort and StoryShort MCP servers: make a faceless video, plan a series, research formats. Script review first, the credit price from the server before any render.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "category": "productivity",
+      "tags": ["video", "shorts", "faceless", "mcp", "skills"],
+      "strict": false,
+      "skills": [
+        "./skills/make-faceless-video",
+        "./skills/plan-a-video-series",
+        "./skills/research-winning-formats"
+      ]
+    }
+  ]
+}

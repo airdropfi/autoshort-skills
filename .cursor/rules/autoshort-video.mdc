@@ -1,0 +1,16 @@
+---
+description: Making faceless short videos with the AutoShort or StoryShort MCP server: script review first, credit price from the server before any render, plan before produce for series. Use when the user asks to make, draft, render or publish a short video, or plan a video series.
+alwaysApply: false
+---
+
+# Faceless videos with AutoShort or StoryShort
+
+This rule is the short form of the skills in `skills/`. Read `skills/make-faceless-video/SKILL.md` for the full flow, and `skills/plan-a-video-series/SKILL.md` for series.
+
+1. Find out which MCP server is connected from your tool list. AutoShort tools start with `autoshort_` (`autoshort_get_capabilities`, `autoshort_draft_video`). StoryShort tools have no prefix (`draft_video`, `render_draft`). Use only tools that are listed; never invent a tool name or parameter. If neither is connected, tell the user to add `https://autoshort.org/api/mcp` or `https://storyshort.app/api/mcp` in Cursor's MCP settings and sign in.
+2. Agree the script with the user first. Narration is read aloud word for word.
+3. Save a free draft (`autoshort_draft_video` or `draft_video`). Drafts render nothing and charge nothing.
+4. Before any paid step, show the price exactly as a tool returned it (`autoshort_estimate_cost` on AutoShort; `get_draft` on StoryShort) with the balance, and ask "Render it?". Render only after a clear yes: `autoshort_render_draft`, or `render_draft` with `confirmCredits` set to the approved price.
+5. Poll `autoshort_get_video` or `get_video` every 20 to 30 seconds until COMPLETED or FAILED, then give the user the video link.
+6. Series: plan first, review, get an explicit confirmation, then produce one quoted episode at a time (AutoShort), or create the series paused and resume it only after the user approves the cost (StoryShort).
+7. Never write a credit number from memory, never buy credits or set up auto-recharge, never promise views, income or monetisation.
