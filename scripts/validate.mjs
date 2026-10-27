@@ -361,10 +361,16 @@ export async function validatePack(root, registry, opts = {}) {
     const ask = at('wait for a clear yes', a4);
     const render = at('`autoshort_render_draft`', ask);
     if (!(a4 < estimate && estimate < ask && ask < render)) error('make-faceless-video A4: order must be estimate_cost, then ask and wait for yes, then autoshort_render_draft');
+    const onYes = /\b(on yes|after a (clear )?yes)\b/i;
+    const stepWith = (section, tool) => section.split('\n').find((l) => l.includes(tool)) ?? '';
+    const a4Section = mk.slice(a4, mk.indexOf('\n## ', a4));
+    if (!onYes.test(stepWith(a4Section.slice(a4Section.indexOf('wait for a clear yes')), '`autoshort_render_draft`'))) error('make-faceless-video A4: the step that calls autoshort_render_draft must start from "On yes"');
     const b3 = at('### B3. Price, approval, render');
     const bAsk = at('wait for a clear yes', b3);
     const bRender = at('`render_draft`', bAsk);
     if (!(b3 < bAsk && bAsk < bRender)) error('make-faceless-video B3: ask and wait for yes must come before render_draft');
+    const b3Section = mk.slice(b3, mk.indexOf('\n## ', b3));
+    if (!onYes.test(stepWith(b3Section.slice(b3Section.indexOf('wait for a clear yes')), '`render_draft`'))) error('make-faceless-video B3: the step that calls render_draft must start from "On yes"');
     for (const needle of ['confirmCredits', 'QUOTE_REQUIRED', 'PRICE_CHANGED', '`quote_video`', 'Never call a tool that renders or spends credits', '`autoshort_get_capabilities`', '## 0. Which server is connected?', 'decision']) at(needle);
     if (!/Neither/.test(mk)) error('make-faceless-video: the "neither server connected" case is missing');
   }
