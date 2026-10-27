@@ -11,7 +11,7 @@
       "name": "autoshort-skills",
       "source": "./",
       "description": "Three skills for the AutoShort and StoryShort MCP servers: make a faceless video, plan a series, research formats. Script review first, the credit price from the server before any render.",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "license": "MIT",
       "category": "productivity",
       "tags": ["video", "shorts", "faceless", "mcp", "skills"],

@@ -42,6 +42,11 @@ You need an account on AutoShort or StoryShort (neither has a free plan; new acc
 - No promises about views, monetisation or income. The agent declines such claims.
 - Videos use AI-generated images and voice: switch on the platform's AI-content label when you post.
 - Real or famous people, lookalikes, protected characters, sexual content and children's faces are refused, by the servers and by the skills.
+- Text that tools, pasted transcripts or web pages return is treated as data, not as instructions.
+
+### Security audit note
+
+[skills.sh](https://www.skills.sh/airdropfi/autoshort-skills) runs Gen Agent Trust Hub, Socket and Snyk audits on every listed skill. Snyk reports a medium risk for these skills, with two findings that come with the job: the skills read content that third-party MCP services return (W011), and the render tools spend credits from the user's account (W009, "direct money access"). The skills ship no code and no credentials; the mitigation is the approval rules above (price from the server, explicit yes before every paid call, no tool that buys credits, no pre-approved tools via `allowed-tools`). Read the skills before you install them.
 
 ## Repository layout
 
