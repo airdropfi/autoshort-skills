@@ -15,7 +15,7 @@ The skills do not render anything themselves. They tell your agent how to use th
 - **AutoShort** (`https://autoshort.org/api/mcp`): faceless shorts where the agent writes the script scene by scene, character series and short dramas with a season plan, product ads, UGC-style app campaigns, AI motion clips, your own pictures, several publishing platforms, an agent spending cap.
 - **StoryShort** (`https://storyshort.app/api/mcp`): narrated story videos from a topic (scary stories, history, facts, motivation, Reddit-style) where the server writes the script and you edit it, and a schedule that makes one story video every N days. Publishes to YouTube and to TikTok Drafts.
 
-Each has its own account, credits and sign-in. The skill checks which tools your client lists and never uses a tool that is not there. Both servers are live as of 2026-10-27: AutoShort lists 54 tools and StoryShort 21 (the tables in [`references/`](references) say which are which). Features that are switched off on a server are marked in the tables and the skills do not offer them.
+Each has its own account, credits and sign-in. The skill checks which tools your client lists and never uses a tool that is not there. As of 2026-11-18 (live `tools/list` of each server): AutoShort lists 55 tools and StoryShort 33 (the tables in [`references/`](references) say which are which). Features that are switched off on a server are marked in the tables and the skills do not offer them.
 
 ## Install
 
@@ -32,7 +32,7 @@ Claude Code plugin marketplace:
 
 Codex, Gemini CLI, Antigravity, Cursor, claude.ai and the rest: see [docs/install.md](docs/install.md), which also shows how to connect the MCP servers. Five prompts to try are in [`examples/`](examples).
 
-You need an account on AutoShort or StoryShort (neither has a free plan; new accounts start with no credits). Drafts are free, renders spend credits from your own balance.
+You need an account on AutoShort or StoryShort. Neither has a free plan (per each site's llms.txt, 2026-11-18). A new AutoShort account starts with no credits; StoryShort's llms.txt does not state a starting balance. Each site's llms.txt says a new account's first video can be a free watermarked one (up to 30 seconds, while the day's free videos last), and that a one-time first episode pack exists for new customers; current terms and prices are whatever the site or the server returns when you ask. Drafts are free, renders spend credits from your own balance.
 
 ## What the skills will and will not do
 

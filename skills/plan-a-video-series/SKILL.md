@@ -77,7 +77,7 @@ Never call `autoshort_create_character_episode` for an episode that has not been
 
 ## Path B: StoryShort, scheduled series
 
-StoryShort has no season-plan or character-sheet tools. A series there is a schedule: one video every N days, written from the series name as the topic. So the plan lives in the conversation, and the server's own checks are the spend gates.
+As of 2026-11-18 StoryShort also lists season-plan, character-sheet and character-episode tools (`plan_drama_season`, `save_season_plan`, `create_character_sheet`, `quote_character_episode` and the rest, see its reference table). When they are in your tool list, follow Path A with the unprefixed names. The flow below covers the other StoryShort series: a schedule that makes one video every N days, written from the series name as the topic. There the plan lives in the conversation, and the server's own checks are the spend gates.
 
 1. **Plan in chat.** Ask for the subject, niche (`list_niches` gives valid values), narration language, video length, how often (every N days), and whether to auto-post to YouTube. Write the series plan: the name (this exact text is the topic every video is written from, so it must carry the user's subject), the niche, the schedule, ten example episode ideas the generator could take, and the tone rules. Show it and edit until the user says it is right.
 2. **Prove one episode first.** Use the `make-faceless-video` skill (draft, price, yes, render) for one video on the series topic so the user sees what the series will produce before any schedule runs.
