@@ -1,6 +1,6 @@
 # AutoShort MCP tools used and avoided by these skills
 
-Server: `https://autoshort.org/api/mcp` (remote MCP, OAuth or API key). Tool names all start with `autoshort_`. Source of truth: the tool list the connected server returns, mirrored at https://autoshort.org/.well-known/mcp.json. This table was checked against the server registry on 2026-10-27 (54 tools) by `scripts/validate.mjs`; the Kind column comes from each tool's own annotations and descriptions.
+Server: `https://autoshort.org/api/mcp` (remote MCP, OAuth or API key). Tool names all start with `autoshort_`. Source of truth: the tool list the connected server returns, mirrored at https://autoshort.org/.well-known/mcp.json. This table was checked against the live `tools/list` of the AutoShort server on 2026-11-18 (55 tools) by `scripts/validate.mjs`; the Kind column comes from each tool's own annotations and descriptions.
 
 Prices are never listed here: a price is whatever `autoshort_estimate_cost`, `autoshort_get_draft`, a quote tool or the render answer returns at the time you ask.
 
@@ -55,6 +55,7 @@ Some tools only appear when the server has the feature switched on (motion tools
 | `autoshort_get_character_sheet` | read-only | Reads a series' character sheets and the exact sheet price. | plan-a-video-series |
 | `autoshort_create_character_sheet` | spends credits | Makes a character sheet (AI images). Spends credits. | plan-a-video-series |
 | `autoshort_select_character_image` | free write | Chooses the sheet and main image a series uses. | plan-a-video-series |
+| `autoshort_archive_character_sheet` | destructive | Takes a bad character sheet out of a series so its slot can be reused. Free; nothing is deleted and videos already made keep their images. Refused while the confirmed season plan names the sheet. | plan-a-video-series |
 | `autoshort_get_season_plan` | read-only | Reads the season plan and its status (none, saved, reviewed, confirmed). | plan-a-video-series |
 | `autoshort_save_season_plan` | free write | Saves a plan, runs `review: true`, confirms with `confirm: true` and `planHash`. | plan-a-video-series |
 | `autoshort_quote_character_episode` | read-only | Prices one planned episode. | plan-a-video-series |

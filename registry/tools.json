@@ -1,10 +1,11 @@
 {
   "generatedFrom": {
-    "autoshort": "git /Users/kienpt/workspace/web3/autoshorts origin/main@a597c2807",
-    "storyshort": "git /Users/kienpt/workspace/web3/storyshort origin/main@5cd92985d"
+    "autoshort": "live tools/list 2026-11-18 (https://autoshort.org/api/mcp)",
+    "storyshort": "live tools/list 2026-11-18 (https://storyshort.app/api/mcp)"
   },
   "autoshort": {
     "tools": [
+      "autoshort_archive_character_sheet",
       "autoshort_buy_credits",
       "autoshort_cancel_video",
       "autoshort_create_character_episode",
@@ -67,27 +68,36 @@
   "storyshort": {
     "tools": [
       "cancel_video",
+      "create_character_episode",
+      "create_character_sheet",
       "create_series",
       "create_video",
       "draft_video",
       "generate_motion_clip",
+      "get_character_sheet",
       "get_connection_status",
       "get_credit_balance",
       "get_draft",
+      "get_season_plan",
       "get_series_performance",
       "get_video",
       "list_motion_templates",
       "list_niches",
+      "list_pricing",
       "list_series",
       "list_social_accounts",
       "list_videos",
       "pause_series",
+      "plan_drama_season",
       "publish_video",
+      "quote_character_episode",
       "quote_motion_clip",
       "quote_video",
       "render_draft",
       "resume_series",
       "revise_scene",
+      "save_season_plan",
+      "select_character_image",
       "update_draft",
       "update_series"
     ],
